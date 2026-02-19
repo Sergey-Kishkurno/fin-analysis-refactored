@@ -16,38 +16,40 @@ Main sections:
 
 ## Orchestration and Muti-Agent Architecture
 
+Here is the high level architecture diagram - not fine-tuned and verified yet:
+```mermaid
 graph TD
     %% Presentation and Entry
-    User((User / Frontend)) -->|API Request| BFF[FastAPI BFF / Orchestrator]
+    User((User))-->|API_Request|BFF[FastAPI_BFF]
     
-    subgraph "Orchestration Layer (FastAPI)"
-        BFF --> Router{Task Router}
-        Router -->|Sync Data| SyncAgent[Synchronization Agent]
-        Router -->|Analyze/Recommend| RecAgent[Recommendation Engine]
-        Router -->|Compute| CalcAgent[Calculation Engine]
+    subgraph Orchestration[Orchestration Layer]
+        BFF-->Router{Task_Router}
+        Router-->|Sync|SyncAgent[Sync_Agent]
+        Router-->|Recommend|RecAgent[Recommendation_Engine]
+        Router-->|Compute|CalcAgent[Calculation_Engine]
     end
 
-    subgraph "Agentic Framework (CrewAI / PydanticAI)"
-        SyncAgent -->|Tool Use| DB_Connector[(External Sources)]
+    subgraph Agents[Agentic Framework]
+        SyncAgent-->|Tool_Use|DB_Ext[(External_Sources)]
         
-        RecAgent -->|Collaborates| ManagerAgent[Manager / Supervisor Agent]
-        ManagerAgent --> SearchTool[RAG / Vector Search]
-        ManagerAgent --> StrategyTool[Strategy Analyzer]
+        RecAgent-->ManagerAgent[Manager_Agent]
+        ManagerAgent-->SearchTool[RAG_Search]
+        ManagerAgent-->StrategyTool[Strategy_Analyzer]
         
-        CalcAgent -->|Tool Use| MathTool[Python Interpreter / Calculator]
+        CalcAgent-->MathTool[Python_Interpreter]
     end
 
-    subgraph "Persistence Layer"
-        SyncAgent -->|Upsert| PG[(Postgres / pgvector)]
-        RecAgent -->|Query| PG
-        CalcAgent -->|Store Snapshots| PG
+    subgraph Persistence[Persistence Layer]
+        SyncAgent-->|Upsert|PG[(Postgres_pgvector)]
+        RecAgent-.->|Query|PG
+        CalcAgent-->|Snapshots|PG
     end
 
     %% Feedback Loop
-    PG -.->|Context/State| BFF
-    RecAgent -.->|Response| BFF
-    BFF -->|JSON/Stream| User
-
+    PG-.->BFF
+    RecAgent-->BFF
+    BFF-->User
+```
 
 ## Data Synchronization Conventions
 Two runtimes:
