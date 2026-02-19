@@ -11,7 +11,7 @@ Main sections:
 4. Recommendation Engine (Multi-Agentic / CrewAI or pydantic.ai)
 5. Calculation Engine (Agent Tools / CrewAI or pydantic.ai)
 
-7. Persistence (Postgres / pgvector)
+6. Persistence (Postgres / pgvector)
 
 
 ## Orchestration and Muti-Agent Architecture
@@ -23,6 +23,8 @@ Two runtimes:
 - Continuous
 - Personal periodic
 
-Need to have universal conventions though.
+Schould be:
+- universal: whether it's continuous or periodic, before generation of recommendations, the state fo available data should be equally synchronized. 
+- configurable: the parameters of the synchronization should be externalized from the codebase.
 
 
