@@ -16,6 +16,37 @@ Main sections:
 
 ## Orchestration and Muti-Agent Architecture
 
+graph TD
+    %% Presentation and Entry
+    User((User / Frontend)) -->|API Request| BFF[FastAPI BFF / Orchestrator]
+    
+    subgraph "Orchestration Layer (FastAPI)"
+        BFF --> Router{Task Router}
+        Router -->|Sync Data| SyncAgent[Synchronization Agent]
+        Router -->|Analyze/Recommend| RecAgent[Recommendation Engine]
+        Router -->|Compute| CalcAgent[Calculation Engine]
+    end
+
+    subgraph "Agentic Framework (CrewAI / PydanticAI)"
+        SyncAgent -->|Tool Use| DB_Connector[(External Sources)]
+        
+        RecAgent -->|Collaborates| ManagerAgent[Manager / Supervisor Agent]
+        ManagerAgent --> SearchTool[RAG / Vector Search]
+        ManagerAgent --> StrategyTool[Strategy Analyzer]
+        
+        CalcAgent -->|Tool Use| MathTool[Python Interpreter / Calculator]
+    end
+
+    subgraph "Persistence Layer"
+        SyncAgent -->|Upsert| PG[(Postgres / pgvector)]
+        RecAgent -->|Query| PG
+        CalcAgent -->|Store Snapshots| PG
+    end
+
+    %% Feedback Loop
+    PG -.->|Context/State| BFF
+    RecAgent -.->|Response| BFF
+    BFF -->|JSON/Stream| User
 
 
 ## Data Synchronization Conventions
