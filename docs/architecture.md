@@ -28,3 +28,13 @@ Schould be:
 - configurable: the parameters of the synchronization should be externalized from the codebase.
 
 
+## Questions to consider
+
+1. Should we have RAG? Any rules, policies? Third party analysis and recommendations?
+2. Data persistence:
+   1. What historical tail of data we need to keep?
+   2. If there any aggregations calculated?
+   3. Any calculation snapshots? Make sense if the system provides recommendations at the certain timepoint (traceability, auditability).
+3. How to handle the data privacy? Even in personal system makes sense to consider.
+4. How to handle the data quality? Missing values (mainly), etc.
+
