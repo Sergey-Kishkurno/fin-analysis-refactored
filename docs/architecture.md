@@ -61,7 +61,7 @@ Schould be:
 - configurable: the parameters of the synchronization should be externalized from the codebase.
 
 
-## Questions to consider
+## Questions To Consider
 
 1. Should we have RAG? Any rules, policies? Third party analysis and recommendations?
 2. Data persistence:
